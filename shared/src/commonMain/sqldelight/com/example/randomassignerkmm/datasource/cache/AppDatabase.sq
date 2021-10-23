@@ -1,0 +1,49 @@
+CREATE TABLE sidework_Entity(
+   id TEXT NOT NULL PRIMARY KEY ,
+   name TEXT NOT NULL,
+   employees TEXT NOT NULL,
+   todoToday INTEGER AS Boolean DEFAULT 0
+);
+
+selectAllSideworks:
+SELECT *
+FROM sidework_Entity;
+
+insertSidework:
+INSERT OR REPLACE
+INTO sidework_Entity(
+       id,
+       name,
+       employees,
+       todoToday
+) VALUES (?,?,?,?);
+
+deleteSidework:
+DELETE
+FROM sidework_Entity
+WHERE id = ?;
+
+
+
+CREATE TABLE employee_Entity(
+   id TEXT NOT NULL PRIMARY KEY,
+   name TEXT NOT NULL,
+   isHere INTEGER AS Boolean DEFAULT 0
+);
+
+selectAllEmployees:
+SELECT *
+FROM employee_Entity;
+
+insertEmployee:
+INSERT OR REPLACE
+INTO employee_Entity(
+       id,
+       name,
+       isHere
+) VALUES (?,?,?);
+
+deleteEmployee:
+DELETE
+FROM employee_Entity
+WHERE id = ?;

@@ -1,6 +1,13 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     kotlin("android")
+
+    //hilt
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+
 }
 
 dependencies {
@@ -25,8 +32,19 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-insets-ui:0.19.0")
 
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
 
+
+    //leak canary
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.7")
+
+    //hilt
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+
+    implementation("com.google.dagger:hilt-android:2.38.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
 }
+
 
 android {
     compileSdk = 31
@@ -55,4 +73,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+// Allow references to generated code hilt
+kapt {
+    correctErrorTypes = true
 }

@@ -37,7 +37,8 @@ kotlin {
 
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
 
-
+                //Flows
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
             }
         }
@@ -81,6 +82,6 @@ android {
 
 sqldelight {
     database("AppDatabase") {
-        packageName = "com.jetbrains.handson.kmm.shared.cache"
+        packageName = "com.example.randomassignerkmm.datasource.cache"
     }
 }
