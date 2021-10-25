@@ -1,25 +1,44 @@
 package com.example.randomassignerkmm.interactors.sidework_edit
 
 import com.example.randomassignerkmm.datasource.cache.AppCache
+import com.example.randomassignerkmm.domain.model.GenericMessageInfo
+import com.example.randomassignerkmm.domain.model.PositiveAction
 import com.example.randomassignerkmm.domain.model.Sidework
+import com.example.randomassignerkmm.domain.model.UIComponentType
 import com.example.randomassignerkmm.domain.util.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetSideworks (
+class GetSideworks(
     private val appCache: AppCache
 ) {
     fun execute(
     ): Flow<DataState<List<Sidework>>> = flow {
 
-        try{
-            val sideworks = appCache.getAllSideworks().sortedBy { it.name }
-            print(sideworks)
-            emit(DataState.data(message = null,data = sideworks))
+        try {
+            val sideworks = appCache.getAllSideworks()
 
-        }catch (e:Exception){
-            //how can we emit errors?
-            emit(DataState.error(message = e.message ?: "Unknown Error"))
+            emit(
+                DataState.data(
+                    message = null,
+                    data = sideworks)
+            )
+        } catch (e: Exception) {
+            emit(
+                DataState.error<List<Sidework>>(
+                    message = GenericMessageInfo.Builder()
+                        .id("GetSideworks.Error")
+                        .title("Warning")
+                        .uiComponentType(UIComponentType.Dialog)
+                        .description(e.message ?: "Unknown Error")
+                        .positive(
+                            PositiveAction(
+                                positiveBtnTxt = "OK",
+                                onPositiveAction = {}
+                            )
+                        )
+                )
+            )
         }
     }
 }

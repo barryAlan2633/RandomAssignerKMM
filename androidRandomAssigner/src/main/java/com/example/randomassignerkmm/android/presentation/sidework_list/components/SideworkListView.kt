@@ -4,19 +4,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.randomassignerkmm.android.presentation.components.ButtonView
 import com.example.randomassignerkmm.android.presentation.components.SideWorkCard
-import com.example.randomassignerkmm.presentation.sidework_list.AppState
+import com.example.randomassignerkmm.presentation.AppState
 
 
 @Composable
-fun SideWorkListView(state: AppState) {
-
+fun SideworkListView(state: AppState) {
 
     LazyColumn(modifier = Modifier
         .padding(30.dp)
@@ -26,4 +22,5 @@ fun SideWorkListView(state: AppState) {
             SideWorkCard(sideWork)
         }
     }
+
 }

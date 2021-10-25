@@ -13,7 +13,7 @@ class AppCacheImpl(
         queries.insertSidework(
             id = sidework.id,
             name = sidework.name,
-            employees = sidework.employees.convertEmployeeListToString(),  //todo convert to list of string
+            employees = sidework.employees.convertEmployeeListToString(),
             todoToday = sidework.todoToday
         )
     }
@@ -22,7 +22,6 @@ class AppCacheImpl(
         queries.deleteSidework(
             id = sideworkID
         )
-
     }
 
 

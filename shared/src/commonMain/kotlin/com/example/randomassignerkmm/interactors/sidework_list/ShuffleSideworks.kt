@@ -1,8 +1,7 @@
 package com.example.randomassignerkmm.interactors.sidework_list
 
 import com.example.randomassignerkmm.datasource.cache.AppCache
-import com.example.randomassignerkmm.domain.model.Employee
-import com.example.randomassignerkmm.domain.model.Sidework
+import com.example.randomassignerkmm.domain.model.*
 import com.example.randomassignerkmm.domain.util.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,29 +15,22 @@ class ShuffleSideworks(
 
         try {
 
+
+
             //guard while making sure to do the list work possible but keep it readable at more work expense
             var sideworks = appCache.getAllSideworks()
-            if (sideworks.isEmpty()) {
-                println("You need to create sideworks first!")
-                return@flow
-            }
+            if (sideworks.isEmpty()) throw Exception("You need to create sideworks first!")
             sideworks = sideworks.filter { it.todoToday }.toMutableList()
 
             var employees = appCache.getAllEmployees()
-            if (employees.isEmpty()) {
-                println("You need to create employees first!")
-                return@flow
-            }
+            if (employees.isEmpty()) throw Exception("You need to create employees first!")
+
             employees = employees.filter { it.isHere }.toMutableList()
 
-            if (sideworks.isEmpty()) {
-                println("You need to select some sideworks first!")
-                return@flow
-            }
-            if (employees.isEmpty()) {
-                println("You need to select some employees first!")
-                return@flow
-            }
+            if (sideworks.isEmpty()) throw Exception( "You need to select some sideworks first!")
+            if (employees.isEmpty()) throw Exception( "You need to select some employees first!")
+
+
 
             //shuffle list to make sure they are random
             employees = employees.shuffled().toMutableList()
@@ -96,8 +88,21 @@ class ShuffleSideworks(
             emit(DataState.data(message = null, data = sideworks.sortedBy { it.name }))
 
         } catch (e: Exception) {
-            //how can we emit errors?
-            emit(DataState.error(message = e.message ?: "Unknown Error"))
+            emit(
+                DataState.error<List<Sidework>>(
+                    message = GenericMessageInfo.Builder()
+                        .id("ShuffleSideworks.Error")
+                        .title("Error")
+                        .uiComponentType(UIComponentType.Dialog)
+                        .description(e.message ?: "Unknown Error")
+                        .positive(
+                            PositiveAction(
+                                positiveBtnTxt = "OK",
+                                onPositiveAction = {}
+                            )
+                        )
+                )
+            )
         }
     }
 }

@@ -1,10 +1,12 @@
-package com.example.randomassignerkmm.presentation.sidework_list
+package com.example.randomassignerkmm.presentation
 
 import com.example.randomassignerkmm.domain.model.Employee
 import com.example.randomassignerkmm.domain.model.Sidework
 
 
 sealed class AppEvents {
+
+    object OnRemoveHeadMessageFromQueue: AppEvents()
 
     object ShuffleSideworks : AppEvents()
 
@@ -21,9 +23,10 @@ sealed class AppEvents {
     data class DeleteSidework(val sideworkID:String) : AppEvents()
     data class SaveSidework(val sidework: Sidework) : AppEvents()
 
-    data class SetNewEmployeeName(val name:String) :AppEvents()
-    data class SetNewSideworkName(val name:String) :AppEvents()
+    data class SetNewEmployeeName(val name:String) : AppEvents()
+    data class SetNewSideworkName(val name:String) : AppEvents()
 
-    data class ToggleTodoToday(val sidework: Sidework):AppEvents()
-    data class ToggleIsHere(val employee: Employee):AppEvents()
+    data class ToggleTodoToday(val sidework: Sidework): AppEvents()
+    data class ToggleIsHere(val employee: Employee): AppEvents()
+
 }

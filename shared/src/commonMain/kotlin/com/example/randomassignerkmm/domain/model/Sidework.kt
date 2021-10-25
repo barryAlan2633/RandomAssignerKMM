@@ -6,6 +6,5 @@ data class Sidework(
     val name: String,
     var employees: MutableList<Employee>,
     val todoToday: Boolean
-) {
-}
+)
 

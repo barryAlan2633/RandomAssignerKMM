@@ -21,11 +21,11 @@ import com.example.randomassignerkmm.android.presentation.components.IconView
 import com.example.randomassignerkmm.android.presentation.components.RoundedCheckView
 import com.example.randomassignerkmm.datasource.cache.RandomUUID
 import com.example.randomassignerkmm.domain.model.Sidework
-import com.example.randomassignerkmm.presentation.sidework_list.AppEvents
-import com.example.randomassignerkmm.presentation.sidework_list.AppState
+import com.example.randomassignerkmm.presentation.AppEvents
+import com.example.randomassignerkmm.presentation.AppState
 
 @Composable
-fun SideWorkEditListView(
+fun SideworkEditListView(
     state: AppState,
     onStateEvent: (AppEvents) -> Unit
 ) {
@@ -88,13 +88,30 @@ fun SideWorkEditListView(
                     .padding(vertical = 5.dp),
                 buttonModifier = Modifier.padding(end = 10.dp)
             ) {
-                if(state.sideworkButtonText == "Add"){
-                    onStateEvent(AppEvents.SaveSidework(Sidework(id = RandomUUID().create(),name = state.newSideworkName,employees = mutableListOf(),todoToday = false)))
-                }else{//save the edit
-                    onStateEvent(AppEvents.SaveSidework(Sidework(id = state.selectedSideworkID,name = state.newSideworkName,employees = mutableListOf(),todoToday = false)))
+                if (state.sideworkButtonText == "Add") {
+                    onStateEvent(
+                        AppEvents.SaveSidework(
+                            Sidework(
+                                id = RandomUUID().create(),
+                                name = state.newSideworkName,
+                                employees = mutableListOf(),
+                                todoToday = false
+                            )
+                        )
+                    )
+                } else {//save the edit
+                    onStateEvent(
+                        AppEvents.SaveSidework(
+                            Sidework(
+                                id = state.selectedSideworkID,
+                                name = state.newSideworkName,
+                                employees = mutableListOf(),
+                                todoToday = state.sideworks[state.sideworks.indexOfFirst { it.id == state.selectedSideworkID }].todoToday
+                            )
+                        )
+                    )
                 }
             }
-
         }
 
 
@@ -131,7 +148,16 @@ fun SideWorkEditListView(
                         text = sideWork.name,
                         isChecked = sideWork.todoToday,
                         onTap = {
-                            onStateEvent(AppEvents.ToggleTodoToday(Sidework(id = sideWork.id,name = sideWork.name,employees = sideWork.employees,todoToday = !sideWork.todoToday)))
+                            onStateEvent(
+                                AppEvents.ToggleTodoToday(
+                                    Sidework(
+                                        id = sideWork.id,
+                                        name = sideWork.name,
+                                        employees = sideWork.employees,
+                                        todoToday = !sideWork.todoToday
+                                    )
+                                )
+                            )
                         })
 
 

@@ -40,9 +40,10 @@ dependencies {
 
     //hilt
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
-
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+
+
 }
 
 

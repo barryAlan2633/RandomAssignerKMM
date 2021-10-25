@@ -78,4 +78,3 @@ fun String.convertEmployeesToList(): List<Employee> {
     return list
 }
 
-//todo find a way to do one to many, finish up

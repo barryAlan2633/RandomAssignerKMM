@@ -4,8 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.randomassignerkmm.domain.model.Employee
-import com.example.randomassignerkmm.domain.model.Sidework
+import com.example.randomassignerkmm.domain.model.*
+import com.example.randomassignerkmm.domain.util.GenericMessageInfoQueueUtil
+import com.example.randomassignerkmm.domain.util.Queue
 import com.example.randomassignerkmm.interactors.employee_edit.DeleteEmployee
 import com.example.randomassignerkmm.interactors.employee_edit.EditEmployee
 import com.example.randomassignerkmm.interactors.employee_edit.GetEmployees
@@ -13,11 +14,13 @@ import com.example.randomassignerkmm.interactors.sidework_edit.DeleteSidework
 import com.example.randomassignerkmm.interactors.sidework_edit.EditSidework
 import com.example.randomassignerkmm.interactors.sidework_edit.GetSideworks
 import com.example.randomassignerkmm.interactors.sidework_list.*
-import com.example.randomassignerkmm.presentation.sidework_list.AppEvents
-import com.example.randomassignerkmm.presentation.sidework_list.AppState
+import com.example.randomassignerkmm.presentation.AppEvents
+import com.example.randomassignerkmm.presentation.AppState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,107 +39,52 @@ constructor(
 
     val state: MutableState<AppState> = mutableStateOf(AppState())
 
-    init {
-        onTriggerEvent(AppEvents.ShuffleSideworks)
-    }
 
     fun onTriggerEvent(event: AppEvents) {
         when (event) {
 
-            AppEvents.ShuffleSideworks -> {
-                shuffleSideworks()
-            }
+            is AppEvents.OnRemoveHeadMessageFromQueue -> removeHeadMessage()
 
-            AppEvents.ToggleEditSideworks -> {
-                getSideWorks()
-                state.value =
-                    state.value.copy(isSideworksEditShowing = !state.value.isSideworksEditShowing)
-            }
-            AppEvents.ToggleEditEmployees -> {
-                getEmployees()
-                state.value =
-                    state.value.copy(isEmployeesEditShowing = !state.value.isEmployeesEditShowing)
-            }
+            AppEvents.ShuffleSideworks -> shuffleSideworks()
 
-            is AppEvents.ToggleEditEmployee -> {
-                if(state.value.selectedEmployeeID == event.employee.id){
-                    state.value = state.value.copy(newEmployeeName = "",
-                        selectedEmployeeID = "",
-                        isEmployeeEditShowing = false,
-                        employeeButtonText = "Add"
-                        )
-                }else{
-                    state.value = state.value.copy(newEmployeeName = event.employee.name,
-                        selectedEmployeeID = event.employee.id,
-                        isEmployeeEditShowing = true,
-                        employeeButtonText = "Save"
-                    )
-                }
+            AppEvents.ToggleEditSideworks -> toggleEditSideworks()
+            AppEvents.ToggleEditEmployees -> toggleEditEmployees()
 
+            is AppEvents.ToggleEditSidework -> toggleEditSidework(event.sidework)
+            is AppEvents.ToggleEditEmployee -> toggleEditEmployee(event.employee)
 
-            }
-            is AppEvents.ToggleEditSidework -> {
-                if(state.value.selectedSideworkID == event.sidework.id){
-                    state.value = state.value.copy(
-                        newSideworkName = "",
-                        selectedSideworkID = "",
-                        isSideworkEditShowing = false,
-                        sideworkButtonText = "Add"
-                    )
-                }else{
-                    state.value = state.value.copy(
-                        newSideworkName = event.sidework.name,
-                        selectedSideworkID = event.sidework.id,
-                        isSideworkEditShowing = true,
-                        sideworkButtonText = "Save"
-                    )
-                }
+            is AppEvents.ToggleTodoToday -> saveSidework(event.sidework)
+            is AppEvents.ToggleIsHere -> saveEmployee(event.employee)
 
+            is AppEvents.SetNewSideworkName -> setNewSideworkName(event.name)
+            is AppEvents.SetNewEmployeeName -> setNewEmployeeName(event.name)
 
-            }
+            is AppEvents.DeleteSidework -> deleteSidework(event.sideworkID)
+            is AppEvents.DeleteEmployee -> deleteEmployee(event.employeeID)
 
-            is AppEvents.SetNewEmployeeName -> {
-                state.value = state.value.copy(newEmployeeName = event.name)
-            }
-            is AppEvents.SetNewSideworkName -> {
-                state.value = state.value.copy(newSideworkName = event.name)
-            }
+            is AppEvents.SaveSidework -> saveSidework(event.sidework)
+            is AppEvents.SaveEmployee -> saveEmployee(event.employee)
 
-            is AppEvents.DeleteEmployee -> {
-                deleteEmployee(event.employeeID)
-                getEmployees()
-            }
-            is AppEvents.DeleteSidework -> {
-                deleteSidework(event.sideworkID)
-                getSideWorks()
-            }
-
-            is AppEvents.SaveEmployee -> {
-                state.value = state.value.copy(newEmployeeName = "")
-                saveEmployee(event.employee)
-                getEmployees()
-            }
-            is AppEvents.SaveSidework -> {
-                state.value = state.value.copy(newSideworkName = "")
-                saveSidework(event.sidework)
-                getSideWorks()
-            }
-
-            is AppEvents.ToggleTodoToday -> {
-                saveSidework(sidework = event.sidework)
-                getSideWorks()
-            }
-            is AppEvents.ToggleIsHere -> {
-                saveEmployee(employee = event.employee)
-                getEmployees()
-            }
-
-            else -> {
-                handleError("Invalid event")
-            }
+            else -> appendToMessageQueue(
+                GenericMessageInfo.Builder()
+                    .id(UUID.randomUUID().toString())
+                    .title("Error")
+                    .uiComponentType(UIComponentType.Dialog)
+                    .description("Invalid event")
+            )
         }
     }
 
+    private fun removeHeadMessage() {
+        try {
+            val queue = state.value.queue
+            queue.remove()
+            state.value = state.value.copy(queue = Queue(mutableListOf())) //force recompose
+            state.value = state.value.copy(queue = queue)
+        } catch (e: Exception) {
+            //nothing to remove, queue is empty
+        }
+    }
 
     private fun shuffleSideworks() {
         shuffleSideworks.execute().onEach { dataState ->
@@ -146,38 +94,104 @@ constructor(
             }
 
             dataState.message?.let { message ->
-                handleError(message)
+                println("***collected" + message.toString())
+                appendToMessageQueue(message)
+            }
+
+        }.launchIn(viewModelScope)
+    }
+
+    private fun toggleEditSideworks() {
+        getSideworks.execute().onEach { dataState ->
+
+            dataState.data?.let { sideworks ->
+                state.value = state.value.copy(
+                    sideworks = sideworks,
+                    isSideworksEditShowing = !state.value.isSideworksEditShowing
+                )
+            }
+
+            dataState.message?.let { message ->
+                appendToMessageQueue(message)
             }
 
 
         }.launchIn(viewModelScope)
     }
 
-    private fun getSideWorks() {
-        getSideworks.execute().onEach { dataState ->
+    private fun toggleEditEmployees() {
+        getEmployees.execute().onEach { dataState ->
+
+            dataState.data?.let { employees ->
+                state.value = state.value.copy(
+                    employees = employees,
+                    isEmployeesEditShowing = !state.value.isEmployeesEditShowing
+                )
+            }
+
+            dataState.message?.let { message ->
+                appendToMessageQueue(message)
+            }
+
+
+        }.launchIn(viewModelScope)
+
+    }
+
+    private fun toggleEditSidework(sidework: Sidework) {
+        if (state.value.selectedSideworkID == sidework.id) {
+            state.value = state.value.copy(
+                newSideworkName = "",
+                selectedSideworkID = "",
+                isSideworkEditShowing = false,
+                sideworkButtonText = "Add"
+            )
+        } else {
+            state.value = state.value.copy(
+                newSideworkName = sidework.name,
+                selectedSideworkID = sidework.id,
+                isSideworkEditShowing = true,
+                sideworkButtonText = "Save"
+            )
+        }
+    }
+
+    private fun toggleEditEmployee(employee: Employee) {
+        if (state.value.selectedEmployeeID == employee.id) {
+            state.value = state.value.copy(
+                newEmployeeName = "",
+                selectedEmployeeID = "",
+                isEmployeeEditShowing = false,
+                employeeButtonText = "Add"
+            )
+        } else {
+            state.value = state.value.copy(
+                newEmployeeName = employee.name,
+                selectedEmployeeID = employee.id,
+                isEmployeeEditShowing = true,
+                employeeButtonText = "Save"
+            )
+        }
+    }
+
+    private fun setNewSideworkName(name: String) {
+        state.value = state.value.copy(newSideworkName = name)
+    }
+
+    private fun setNewEmployeeName(name: String) {
+        state.value = state.value.copy(newEmployeeName = name)
+    }
+
+    private fun deleteSidework(sideworkID: String) {
+        deleteSidework.execute(sideworkID).onEach { dataState ->
 
             dataState.data?.let { sideworks ->
                 state.value = state.value.copy(sideworks = sideworks)
             }
 
             dataState.message?.let { message ->
-                handleError(message)
+                appendToMessageQueue(message)
             }
-
-
-        }.launchIn(viewModelScope)
-    }
-    private fun getEmployees() {
-        getEmployees.execute().onEach { dataState ->
-
-            dataState.data?.let { employees ->
-                state.value = state.value.copy(employees = employees)
-            }
-
-            dataState.message?.let { message ->
-                handleError(message)
-            }
-
 
         }.launchIn(viewModelScope)
     }
@@ -185,17 +199,32 @@ constructor(
     private fun deleteEmployee(employeeID: String) {
         deleteEmployee.execute(employeeID).onEach { dataState ->
 
+            dataState.data?.let { employees ->
+                state.value = state.value.copy(employees = employees)
+            }
+
             dataState.message?.let { message ->
-                handleError(message)
+                appendToMessageQueue(message)
             }
 
         }.launchIn(viewModelScope)
     }
-    private fun deleteSidework(sideworkID: String) {
-        deleteSidework.execute(sideworkID).onEach { dataState ->
+
+    private fun saveSidework(sidework: Sidework) {
+        editSidework.execute(sidework).onEach { dataState ->
+
+            dataState.data?.let { sideworks ->
+                state.value = state.value.copy(
+                    sideworks = sideworks,
+                    newSideworkName = "",
+                    sideworkButtonText = "Add",
+                    selectedSideworkID = "",
+                    isSideworkEditShowing = false
+                )
+            }
 
             dataState.message?.let { message ->
-                handleError(message)
+                appendToMessageQueue(message)
             }
 
         }.launchIn(viewModelScope)
@@ -204,26 +233,37 @@ constructor(
     private fun saveEmployee(employee: Employee) {
         editEmployee.execute(employee).onEach { dataState ->
 
+            dataState.data?.let { employees ->
+
+                state.value = state.value.copy(
+                    employees = employees,
+                    newEmployeeName = "",
+                    employeeButtonText = "Add",
+                    selectedEmployeeID = "",
+                    isEmployeeEditShowing = false
+                )
+            }
+
             dataState.message?.let { message ->
-                handleError(message)
+                appendToMessageQueue(message)
             }
 
         }.launchIn(viewModelScope)
     }
-    private fun saveSidework(sidework:Sidework) {
-        editSidework.execute(sidework).onEach { dataState ->
 
-            dataState.message?.let { message ->
-                handleError(message)
-            }
+    private fun appendToMessageQueue(messageInfo: GenericMessageInfo.Builder) {
+        if (!GenericMessageInfoQueueUtil()
+                .doesMessageAlreadyExistInQueue(
+                queue = state.value.queue, messageInfo = messageInfo.build()
+            )
+        ) {
+            val queue = state.value.queue
+            queue.add(messageInfo.build())
+            state.value = state.value.copy(queue = Queue(mutableListOf()))
+            state.value = state.value.copy(queue = queue)
+        }
 
-        }.launchIn(viewModelScope)
-    }
-
-    private fun handleError(errorMessage: String) {
-        //todo handle the error
     }
 }
 
 
-//todo set uuids with dependency, figure out saving one to many relation,finish course,hook to ios

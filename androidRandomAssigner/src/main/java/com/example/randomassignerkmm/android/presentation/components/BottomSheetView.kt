@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomSheetView(
     onValueChanged: () -> Unit,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 
 ) {
 

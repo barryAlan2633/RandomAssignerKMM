@@ -1,7 +1,9 @@
-package com.example.randomassignerkmm.presentation.sidework_list
+package com.example.randomassignerkmm.presentation
 
 import com.example.randomassignerkmm.domain.model.Employee
+import com.example.randomassignerkmm.domain.model.GenericMessageInfo
 import com.example.randomassignerkmm.domain.model.Sidework
+import com.example.randomassignerkmm.domain.util.Queue
 
 data class AppState (
     val shuffledSideworks:List<Sidework> = listOf(),
@@ -22,6 +24,8 @@ data class AppState (
     val selectedEmployeeID:String = "",
 
     val employeeButtonText:String = "Add",
-    val sideworkButtonText:String = "Add"
+    val sideworkButtonText:String = "Add",
+
+    val queue:Queue<GenericMessageInfo> = Queue(mutableListOf())
 
     )

@@ -21,8 +21,8 @@ import com.example.randomassignerkmm.android.presentation.components.IconView
 import com.example.randomassignerkmm.android.presentation.components.RoundedCheckView
 import com.example.randomassignerkmm.datasource.cache.RandomUUID
 import com.example.randomassignerkmm.domain.model.Employee
-import com.example.randomassignerkmm.presentation.sidework_list.AppEvents
-import com.example.randomassignerkmm.presentation.sidework_list.AppState
+import com.example.randomassignerkmm.presentation.AppEvents
+import com.example.randomassignerkmm.presentation.AppState
 
 @Composable
 fun EmployeeEditListView(
@@ -89,12 +89,28 @@ fun EmployeeEditListView(
                     .padding(vertical = 5.dp),
                 buttonModifier = Modifier.padding(end = 10.dp)
             ) {
-                if(state.sideworkButtonText == "Add"){
-                    onStateEvent(AppEvents.SaveEmployee(Employee(id = RandomUUID().create() ,name = state.newEmployeeName,isHere = false)))
-                }else{//save the edit
-                    onStateEvent(AppEvents.SaveEmployee(Employee(id = state.selectedEmployeeID ,name = state.newEmployeeName,isHere = false)))
+                if (state.employeeButtonText == "Add") {
+                    onStateEvent(
+                        AppEvents.SaveEmployee(
+                            Employee(
+                                id = RandomUUID().create(),
+                                name = state.newEmployeeName,
+                                isHere = false
+                            )
+                        )
+                    )
+                } else {//save the edit
+                    onStateEvent(
+                        AppEvents.SaveEmployee(
+                            Employee(
+                                id = state.selectedEmployeeID,
+                                name = state.newEmployeeName,
+                                isHere = state.employees[state.employees.indexOfFirst { it.id == state.selectedEmployeeID }].isHere
+                            )
+                        )
+                    )
                 }
-             }
+            }
 
         }
 
@@ -131,7 +147,15 @@ fun EmployeeEditListView(
                         text = employee.name,
                         isChecked = employee.isHere,
                         onTap = {
-                             onStateEvent(AppEvents.ToggleIsHere(Employee(id = employee.id ,name = employee.name,isHere = !employee.isHere)))
+                            onStateEvent(
+                                AppEvents.ToggleIsHere(
+                                    Employee(
+                                        id = employee.id,
+                                        name = employee.name,
+                                        isHere = !employee.isHere
+                                    )
+                                )
+                            )
                         }
                     )
 
@@ -143,10 +167,10 @@ fun EmployeeEditListView(
                             iconSize = 30.dp,
                             circleColor = if (state.isEmployeeEditShowing && state.selectedEmployeeID == employee.id) Color.Red else Color.Black,
                             onSelected = {
-                                 onStateEvent(AppEvents.ToggleEditEmployee(employee))
+                                onStateEvent(AppEvents.ToggleEditEmployee(employee))
                             },
                             onDeselected = {
-                                 onStateEvent(AppEvents.ToggleEditEmployee(employee))
+                                onStateEvent(AppEvents.ToggleEditEmployee(employee))
                             })
 
 
