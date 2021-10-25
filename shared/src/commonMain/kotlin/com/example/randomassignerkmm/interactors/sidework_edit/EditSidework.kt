@@ -20,7 +20,7 @@ class EditSidework(
 
 
         try {
-            if (sidework.name.trim() == "") {//todo add trim on other parts
+            if (sidework.name== "") {
                 throw Exception("Your new sidework must have a name!")
             }
 

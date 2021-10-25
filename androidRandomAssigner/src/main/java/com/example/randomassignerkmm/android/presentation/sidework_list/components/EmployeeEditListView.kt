@@ -94,7 +94,7 @@ fun EmployeeEditListView(
                         AppEvents.SaveEmployee(
                             Employee(
                                 id = RandomUUID().create(),
-                                name = state.newEmployeeName,
+                                name = state.newEmployeeName.trim(),
                                 isHere = false
                             )
                         )
@@ -104,7 +104,7 @@ fun EmployeeEditListView(
                         AppEvents.SaveEmployee(
                             Employee(
                                 id = state.selectedEmployeeID,
-                                name = state.newEmployeeName,
+                                name = state.newEmployeeName.trim(),
                                 isHere = state.employees[state.employees.indexOfFirst { it.id == state.selectedEmployeeID }].isHere
                             )
                         )
@@ -144,6 +144,7 @@ fun EmployeeEditListView(
                 ) {
 
                     RoundedCheckView(
+                        modifier = Modifier.weight(1f),
                         text = employee.name,
                         isChecked = employee.isHere,
                         onTap = {

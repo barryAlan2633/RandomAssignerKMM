@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun RoundedCheckView(
+    modifier:Modifier,
     text: String,
     isChecked:Boolean,
     onTap:() -> Unit,
@@ -46,7 +48,7 @@ fun RoundedCheckView(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .toggleable(value = isChecked,role = Role.Checkbox) {
                 onTap()
             }) {
@@ -61,7 +63,9 @@ fun RoundedCheckView(
             contentAlignment = Alignment.Center
         ) {
             if(isChecked){
-                Icon(imageVector = Icons.Default.Check, contentDescription = "")
+                Icon(imageVector = Icons.Default.Check, contentDescription = "", tint = Color.Black)
+            }else{
+                Icon(imageVector = Icons.Default.Close, contentDescription = "", tint = Color.Gray)
             }
          }
 

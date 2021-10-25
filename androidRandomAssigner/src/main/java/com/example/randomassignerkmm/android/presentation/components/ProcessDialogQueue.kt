@@ -11,7 +11,6 @@ fun ProcessDialogQueue(
     onRemoveHeadMessageFromQueue: () -> Unit,
 ) {
     dialogQueue?.peek()?.let { dialogInfo ->
-        println("***processing")
         GenericDialog(
             onDismiss = dialogInfo.onDismiss,
             title = dialogInfo.title,

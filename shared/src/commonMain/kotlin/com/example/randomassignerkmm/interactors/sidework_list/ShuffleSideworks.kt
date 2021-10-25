@@ -15,8 +15,6 @@ class ShuffleSideworks(
 
         try {
 
-
-
             //guard while making sure to do the list work possible but keep it readable at more work expense
             var sideworks = appCache.getAllSideworks()
             if (sideworks.isEmpty()) throw Exception("You need to create sideworks first!")

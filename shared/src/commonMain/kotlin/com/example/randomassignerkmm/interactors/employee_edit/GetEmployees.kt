@@ -20,7 +20,7 @@ class GetEmployees(
             emit(
                 DataState.data(
                     message = null,
-                    data = appCache.getAllEmployees())
+                    data = appCache.getAllEmployees().sortedBy { it.name })
             )
         } catch (e: Exception) {
             emit(

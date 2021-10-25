@@ -22,13 +22,6 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-//            val systemUiController = rememberSystemUiController()
-//
-//            systemUiController.setStatusBarColor(
-//                color = Color.Transparent,
-//                darkIcons = true
-//            )
-
             val viewModel: AppViewModel = hiltViewModel()
 
             AppTheme(

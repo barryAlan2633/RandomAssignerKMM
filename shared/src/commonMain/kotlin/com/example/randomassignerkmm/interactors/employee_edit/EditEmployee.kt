@@ -15,6 +15,10 @@ class EditEmployee(
     ): Flow<DataState<List<Employee>>> = flow {
 
         try {
+            if (employee.name == "") {
+                throw Exception("Your new employee must have a name!")
+            }
+
             appCache.insertEmployee(employee)
 
             emit(

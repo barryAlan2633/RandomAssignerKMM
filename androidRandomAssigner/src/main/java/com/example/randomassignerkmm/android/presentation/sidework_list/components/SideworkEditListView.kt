@@ -93,7 +93,7 @@ fun SideworkEditListView(
                         AppEvents.SaveSidework(
                             Sidework(
                                 id = RandomUUID().create(),
-                                name = state.newSideworkName,
+                                name = state.newSideworkName.trim(),
                                 employees = mutableListOf(),
                                 todoToday = false
                             )
@@ -104,7 +104,7 @@ fun SideworkEditListView(
                         AppEvents.SaveSidework(
                             Sidework(
                                 id = state.selectedSideworkID,
-                                name = state.newSideworkName,
+                                name = state.newSideworkName.trim(),
                                 employees = mutableListOf(),
                                 todoToday = state.sideworks[state.sideworks.indexOfFirst { it.id == state.selectedSideworkID }].todoToday
                             )
@@ -145,6 +145,7 @@ fun SideworkEditListView(
 
                 ) {
                     RoundedCheckView(
+                        modifier = Modifier.weight(1f),
                         text = sideWork.name,
                         isChecked = sideWork.todoToday,
                         onTap = {

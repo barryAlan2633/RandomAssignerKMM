@@ -12,7 +12,6 @@ class Queue<T> (list:MutableList<T>){
 
     fun add(element: T){
         items.add(element)
-        println("*** AddingItem" + items.toString())
     }
 
     @Throws(Exception::class)
@@ -20,7 +19,6 @@ class Queue<T> (list:MutableList<T>){
         if (this.isEmpty()){
             throw Exception("fun 'remove' threw an exception: Nothing to remove from the queue.")
         } else {
-            println("*** RemovingItem" + items.toString())
             return items.removeAt(0)
 
         }

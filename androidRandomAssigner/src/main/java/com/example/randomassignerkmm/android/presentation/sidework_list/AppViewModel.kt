@@ -53,19 +53,19 @@ constructor(
             is AppEvents.ToggleEditSidework -> toggleEditSidework(event.sidework)
             is AppEvents.ToggleEditEmployee -> toggleEditEmployee(event.employee)
 
-            is AppEvents.ToggleTodoToday -> saveSidework(event.sidework)
-            is AppEvents.ToggleIsHere -> saveEmployee(event.employee)
+          is AppEvents.ToggleTodoToday -> saveSidework(event.sidework)
+          is AppEvents.ToggleIsHere -> saveEmployee(event.employee)
 
-            is AppEvents.SetNewSideworkName -> setNewSideworkName(event.name)
-            is AppEvents.SetNewEmployeeName -> setNewEmployeeName(event.name)
+          is AppEvents.SetNewSideworkName -> setNewSideworkName(event.name)
+          is AppEvents.SetNewEmployeeName -> setNewEmployeeName(event.name)
 
-            is AppEvents.DeleteSidework -> deleteSidework(event.sideworkID)
-            is AppEvents.DeleteEmployee -> deleteEmployee(event.employeeID)
+          is AppEvents.DeleteSidework -> deleteSidework(event.sideworkID)
+          is AppEvents.DeleteEmployee -> deleteEmployee(event.employeeID)
 
-            is AppEvents.SaveSidework -> saveSidework(event.sidework)
-            is AppEvents.SaveEmployee -> saveEmployee(event.employee)
+          is AppEvents.SaveSidework -> saveSidework(event.sidework)
+          is AppEvents.SaveEmployee -> saveEmployee(event.employee)
 
-            else -> appendToMessageQueue(
+          else -> appendToMessageQueue(
                 GenericMessageInfo.Builder()
                     .id(UUID.randomUUID().toString())
                     .title("Error")
@@ -94,7 +94,6 @@ constructor(
             }
 
             dataState.message?.let { message ->
-                println("***collected" + message.toString())
                 appendToMessageQueue(message)
             }
 

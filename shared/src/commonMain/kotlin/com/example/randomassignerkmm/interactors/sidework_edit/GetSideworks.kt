@@ -21,7 +21,7 @@ class GetSideworks(
             emit(
                 DataState.data(
                     message = null,
-                    data = sideworks)
+                    data = sideworks.sortedBy { it.name })
             )
         } catch (e: Exception) {
             emit(
