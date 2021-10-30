@@ -52,7 +52,6 @@ fun List<Employee>.convertEmployeeListToString(): String {
 }
 
 
-//todo if this works i am so dumb yet so clever sometimes :'D Oct 23, 2021
 fun String.convertEmployeesToList(): List<Employee> {
     val list: ArrayList<Employee> = ArrayList()
     for (employeeString in split(",")) {

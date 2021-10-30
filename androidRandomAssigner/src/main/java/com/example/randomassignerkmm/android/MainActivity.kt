@@ -35,9 +35,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
 
 
-//todo are you sure you want to delete on sidework and employee

@@ -1,5 +1,7 @@
 package com.example.randomassignerkmm.android.presentation.sidework_list.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -149,6 +151,7 @@ fun SideworkEditListView(
                         text = sideWork.name,
                         isChecked = sideWork.todoToday,
                         onTap = {
+
                             onStateEvent(
                                 AppEvents.ToggleTodoToday(
                                     Sidework(

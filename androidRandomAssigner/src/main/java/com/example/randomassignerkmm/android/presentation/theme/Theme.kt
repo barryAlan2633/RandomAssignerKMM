@@ -85,11 +85,9 @@ fun AppTheme(
     val configuration = LocalConfiguration.current
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
-            //todo add padding to left or right depending
             padding = PaddingValues(bottom = 0.dp, start = 0.dp, end = 0.dp, top = 0.dp)
         }
         else -> {
-            //todo add padding to top or bottom depending
             padding = PaddingValues(bottom = 50.dp, start = 0.dp, end = 0.dp, top = 0.dp)
         }
     }
