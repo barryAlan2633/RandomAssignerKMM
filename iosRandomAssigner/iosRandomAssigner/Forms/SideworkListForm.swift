@@ -10,21 +10,24 @@ import SwiftUI
 import shared
 
 struct SideworkListForm: View {
- 
-    var sideworks:[Sidework]
+    @EnvironmentObject var appViewModel: AppViewModel
+
+    var h:[Int] = [0,1,2,3]
      
     var body: some View {
         
         ScrollView {
             
             LazyVStack(alignment: .leading) {
-//                ForEach(sideworks.indices, id:\.self) { index in
-//                    SideworkCardView(
-//                        sideWorkWithEmployees: sideworks[index]
-//                    )
-//                }
+                ForEach(appViewModel.state.shuffledSideworks, id: \.self) { sidework in
+//                ForEach(h,id:\.self) { sidework in
+//                    Text("\(sidework)")
+                        SideworkCardView(sideWorkWithEmployees: sidework)
+                }
             }
+            
         }
+
         .padding(30)
         .padding(.top,50)
     }

@@ -2,7 +2,9 @@ package com.example.randomassignerkmm.interactors.sidework_list
 
 import com.example.randomassignerkmm.datasource.cache.AppCache
 import com.example.randomassignerkmm.domain.model.*
+import com.example.randomassignerkmm.domain.util.CommonFlow
 import com.example.randomassignerkmm.domain.util.DataState
+import com.example.randomassignerkmm.domain.util.asCommonFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlin.math.floor
@@ -11,7 +13,7 @@ class ShuffleSideworks(
     private val appCache: AppCache
 ) {
     fun execute(
-    ): Flow<DataState<List<Sidework>>> = flow {
+    ): CommonFlow<DataState<List<Sidework>>> = flow {
 
         try {
 
@@ -59,7 +61,7 @@ class ShuffleSideworks(
             for (sidework in sideworks) {
                 sidework.employees = mutableListOf()
                 while (sideworkPerEmployee > 0) {
-                    sidework.employees.add(employees[employeeIndex])
+                    sidework.employees = sidework.employees + employees[employeeIndex]
                     sideworkPerEmployee -= 1
                     employeeIndex += 1
                 }
@@ -76,8 +78,7 @@ class ShuffleSideworks(
                     if (employeeIndex > employees.size - 1) {
                         break
                     }
-
-                    sidework.employees.add(employees[employeeIndex])
+                    sidework.employees = sidework.employees + employees[employeeIndex]
                     employeeIndex += 1
 
                 }
@@ -102,7 +103,7 @@ class ShuffleSideworks(
                 )
             )
         }
-    }
+    }.asCommonFlow()
 }
 
 

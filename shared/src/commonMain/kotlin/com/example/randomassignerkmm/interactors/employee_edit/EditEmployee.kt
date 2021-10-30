@@ -2,7 +2,9 @@ package com.example.randomassignerkmm.interactors.employee_edit
 
 import com.example.randomassignerkmm.datasource.cache.AppCache
 import com.example.randomassignerkmm.domain.model.*
+import com.example.randomassignerkmm.domain.util.CommonFlow
 import com.example.randomassignerkmm.domain.util.DataState
+import com.example.randomassignerkmm.domain.util.asCommonFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -12,7 +14,7 @@ class EditEmployee(
 
     fun execute(
         employee: Employee
-    ): Flow<DataState<List<Employee>>> = flow {
+    ): CommonFlow<DataState<List<Employee>>> = flow {
 
         try {
             if (employee.name == "") {
@@ -43,5 +45,5 @@ class EditEmployee(
                 )
             )
         }
-    }
+    }.asCommonFlow()
 }

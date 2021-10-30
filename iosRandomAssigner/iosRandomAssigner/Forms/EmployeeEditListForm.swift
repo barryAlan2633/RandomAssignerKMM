@@ -7,113 +7,112 @@
 //
 
 import SwiftUI
+import shared
 
 struct EmployeeEditListForm: View {
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     
     @State private var name: String = ""
     @State private var buttonText: String = "Add"
-    @State private var employeeToEditUUID:UUID? = nil
     
     var body: some View{
         VStack(alignment: HorizontalAlignment.leading){
             
             HStack{
                 TextField("Enter Employee Name", text: $name)
+                    .onChange(of: name, perform: { value in
+                        appViewModel.onTriggerEvent(stateEvent: AppEvents.SetNewEmployeeName(name: value))
+                    })
                     .foregroundColor(Color.black)
                     .font(.system(size: 20, weight: .medium))
                 
                 Spacer()
                 
-                ButtonView(text: buttonText,width:75){
-                    if(buttonText == "Add"){
-                        if(name.trimmingCharacters(in: .whitespacesAndNewlines) != ""){
-//                            addSidework(name: name)
-                            name = ""
-                        }
+                //MARK: - ADD SAVE BUTTON
+                ButtonView(text: appViewModel.state.employeeButtonText,width:75){
+                    
+                    name = ""
+                    
+                    if(appViewModel.state.employeeButtonText == "Add"){
+                        
+                        appViewModel.onTriggerEvent(
+                            stateEvent: AppEvents.SaveEmployee(
+                                employee:Employee(
+                                    id: UUID().uuidString,
+                                    name: appViewModel.state.newEmployeeName,
+                                    isHere: false
+                                )
+                            )
+                        )
                     }else{
-                        if(name.trimmingCharacters(in: .whitespacesAndNewlines) != ""){
-//                            updateEmployeeName(employee:employees.first(where: {employee in employee.id == employeeToEditUUID}), newName: name)
-                            employeeToEditUUID = nil
-                            name = ""
-                            buttonText = "Add"
-                        }
+                        
+                        appViewModel.onTriggerEvent(
+                            stateEvent: AppEvents.SaveEmployee(
+                                employee:Employee(
+                                    id: appViewModel.state.selectedEmployeeID,
+                                    name: appViewModel.state.newEmployeeName,
+                                    isHere:(appViewModel.state.employees.first(where: {it in
+                                        it.id == appViewModel.state.selectedEmployeeID})?.isHere ?? false )
+                                )
+                            )
+                        )
                     }
                 }
             }
             
-//            Text("Employees:\(employees.count)")
-//                .foregroundColor(.gray)
-//
+            Text("Employees:\(appViewModel.state.employees.count)")
+                .foregroundColor(.gray)
+            
             
             ScrollView{
                 VStack(alignment:HorizontalAlignment.leading){
-//                    ForEach(employees, id: \.self) { data in
-//
-//                        HStack{
-//
-//                            HStack{
-//                                Button(action:{toggleIsHere(data:data)}){
-//
-//                                    Image(systemName: data.isHere ? "checkmark.circle": "circle")
-//                                        .font(data.isHere ? .system(size: 40):.system(size: 20) )
-//                                        .foregroundColor(data.isHere ? Color.black: Color.gray)
-//
-//
-//                                    Text(data.wrappedName)
-//                                        .foregroundColor(data.isHere ? Color.black: Color.gray)
-//                                        .font(.system(size: 20, weight: .medium))
-//                                }
-//
-//                                Spacer()
-//
-//                                IconView(name:"pencil.circle.fill",
-//                                         foregroundColor: employeeToEditUUID != nil && employeeToEditUUID == data.id ?
-//                                            .red :.black){
-//                                    if(employeeToEditUUID == data.id){
-//                                        employeeToEditUUID = nil
-//                                        name = ""
-//                                        buttonText = "Add"
-//
-//                                    }else{
-//                                        employeeToEditUUID = data.id
-//                                        name = data.wrappedName
-//                                        buttonText = "Save"
-//                                    }
-//                                }
-//
-//                                IconView(name: "trash.circle.fill", foregroundColor: .black) {
-//                                    deleteItems(employee:data)
-//                                    employeeToEditUUID = nil
-//                                    buttonText = "Add"
-//
-//                                }
-//                            }
-//
-//
-//                        }
-//                        .padding()
-//                    }
+                    ForEach(appViewModel.state.employees, id: \.self) { employee in
+                        
+                        HStack{
+                            
+                            HStack{
+                                Button(action:{
+                                    appViewModel.onTriggerEvent(stateEvent: AppEvents.ToggleIsHere(employee: Employee(id: employee.id,name: employee.name, isHere: !employee.isHere)))
+                                }){
+                                    
+                                    Image(systemName: employee.isHere ? "checkmark.circle": "multiply.circle")
+                                        .font(employee.isHere ? .system(size: 40):.system(size: 20) )
+                                        .foregroundColor(employee.isHere ? Color.black: Color.gray)
+                                    
+                                    
+                                    Text(employee.name)
+                                        .foregroundColor(employee.isHere ? Color.black: Color.gray)
+                                        .font(.system(size: 20, weight: .medium))
+                                }
+                                
+                                Spacer()
+                                
+                                IconView(name:"pencil.circle.fill",
+                                         foregroundColor: appViewModel.state.isEmployeeEditShowing && appViewModel.state.selectedEmployeeID == employee.id ? .red :.black){
+                                    
+                                    if(appViewModel.state.selectedEmployeeID == employee.id){
+                                        name = ""
+                                    }else{
+                                        name = employee.name
+                                    }
+                                    
+                                    appViewModel.onTriggerEvent(stateEvent: AppEvents.ToggleEditEmployee(employee: employee))
+                                }
+                                
+                                IconView(name: "trash.circle.fill", foregroundColor: .black) {
+                                    appViewModel.onTriggerEvent(stateEvent: AppEvents.DeleteEmployee(employeeID: employee.id))
+                                }
+                            }
+                        }
+                        .padding()
+                    }
                 }
             }
         }
+        .onAppear(perform: {
+            self.name = appViewModel.state.newEmployeeName
+            self.buttonText = appViewModel.state.employeeButtonText
+        })
     }
-     
-//    private func toggleIsHere(data:Employee){
-//
-//    }
-    
-//    private func addSidework(name:String) {
-//        withAnimation {
-//
-//        }
-//    }
-//
-//    private func updateEmployeeName(employee:Employee?, newName:String) {
-//
-//
-//    }
-//
-//    private func deleteItems(employee:Employee) {
-//
-//    }
 }

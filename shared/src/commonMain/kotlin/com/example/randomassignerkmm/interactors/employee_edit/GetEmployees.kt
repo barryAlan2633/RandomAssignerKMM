@@ -5,7 +5,9 @@ import com.example.randomassignerkmm.domain.model.Employee
 import com.example.randomassignerkmm.domain.model.GenericMessageInfo
 import com.example.randomassignerkmm.domain.model.PositiveAction
 import com.example.randomassignerkmm.domain.model.UIComponentType
+import com.example.randomassignerkmm.domain.util.CommonFlow
 import com.example.randomassignerkmm.domain.util.DataState
+import com.example.randomassignerkmm.domain.util.asCommonFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -14,7 +16,7 @@ class GetEmployees(
 ) {
 
     fun execute(
-    ): Flow<DataState<List<Employee>>> = flow {
+    ): CommonFlow<DataState<List<Employee>>> = flow {
 
         try {
             emit(
@@ -39,5 +41,5 @@ class GetEmployees(
                 )
             )
         }
-    }
+    }.asCommonFlow()
 }

@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.sp
 import com.example.randomassignerkmm.android.presentation.components.ButtonView
 import com.example.randomassignerkmm.android.presentation.components.IconView
 import com.example.randomassignerkmm.android.presentation.components.RoundedCheckView
-import com.example.randomassignerkmm.datasource.cache.RandomUUID
 import com.example.randomassignerkmm.domain.model.Sidework
 import com.example.randomassignerkmm.presentation.AppEvents
 import com.example.randomassignerkmm.presentation.AppState
+import java.util.*
 
 @Composable
 fun SideworkEditListView(
@@ -92,7 +92,7 @@ fun SideworkEditListView(
                     onStateEvent(
                         AppEvents.SaveSidework(
                             Sidework(
-                                id = RandomUUID().create(),
+                                id = UUID.randomUUID().toString(),
                                 name = state.newSideworkName.trim(),
                                 employees = mutableListOf(),
                                 todoToday = false

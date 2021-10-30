@@ -7,10 +7,20 @@
 //
 
 import SwiftUI
+import shared
 
 struct BottomSheetView<Content: View>: View{
-    @Binding var show:Bool
-    @ViewBuilder var content: Content
+//    @Binding var show:Bool
+    var content: Content
+    private let onTriggerEvent:() -> Void
+    
+    init(
+        onTriggerEvent:@escaping()->Void,
+        @ViewBuilder content: @escaping () -> Content
+    ){
+        self.onTriggerEvent = onTriggerEvent
+        self.content = content()
+    }
     
     var body: some View{
         
@@ -24,7 +34,9 @@ struct BottomSheetView<Content: View>: View{
                 
                 Spacer()
                 
-                ButtonView(text: "Finished",width:280, onButtonPressed: {show.toggle()})
+                ButtonView(text: "Finished",width:280, onButtonPressed: {
+                    onTriggerEvent()
+                })
             }
             .padding()
         }
@@ -37,10 +49,10 @@ struct BottomSheetView<Content: View>: View{
 }
 
 
-struct BottomSheetView_Previews: PreviewProvider {
-    static var previews: some View {
-        BottomSheetView(show:.constant(true),content:{
-            
-        })
-    }
-}
+//struct BottomSheetView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BottomSheetView(show:.constant(true),content:{
+//
+//        })
+//    }
+//}

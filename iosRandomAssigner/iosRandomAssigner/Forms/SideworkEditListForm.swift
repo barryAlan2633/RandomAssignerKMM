@@ -7,120 +7,112 @@
 //
 
 import SwiftUI
+import shared
 
 struct SideworkEditListForm: View {
-     
+    @EnvironmentObject var appViewModel: AppViewModel
     
     
     @State private var name: String = ""
     @State private var buttonText: String = "Add"
-    @State private var sideWorkToEditUUID:UUID? = nil
- 
+    
     
     var body: some View{
         VStack(alignment: HorizontalAlignment.leading){
             
             HStack{
-                TextField("Enter Side Work Name", text: $name)
+                TextField("Enter Side Work Name",text: $name)
+                    .onChange(of: name, perform: { value in
+                        appViewModel.onTriggerEvent(stateEvent: AppEvents.SetNewSideworkName(name: value))
+                    })
                     .foregroundColor(Color.black)
                     .font(.system(size: 20, weight: .medium))
                 
+                
+                
                 Spacer()
                 
-                ButtonView(text: buttonText,width:75){
-                    if(buttonText == "Add"){
-                        if(name.trimmingCharacters(in: .whitespacesAndNewlines) != ""){
-//                            addSidework(name: name)
-                            name = ""
-                        }
+                //MARK: - ADD SAVE BUTTON
+                ButtonView(text: appViewModel.state.sideworkButtonText,width:75){
+                    
+                    name = ""
+                    
+                    if(appViewModel.state.sideworkButtonText == "Add"){
+                        
+                        appViewModel.onTriggerEvent(
+                            stateEvent: AppEvents.SaveSidework(
+                                sidework:Sidework(
+                                    id: UUID().uuidString,
+                                    name: appViewModel.state.newSideworkName,
+                                    employees: [],
+                                    todoToday: false
+                                )
+                            )
+                        )
+                        
+                        
                     }else{
-                        if(name.trimmingCharacters(in: .whitespacesAndNewlines) != ""){
-//                            updateSideworkName(sideWork:sideworks.first(where: {sideWork in sideWork.id == sideWorkToEditUUID}), newName: name)
-                            sideWorkToEditUUID = nil
-                            name = ""
-                            buttonText = "Add"
-                        }
+                        
+                        appViewModel.onTriggerEvent(
+                            stateEvent: AppEvents.SaveSidework(
+                                sidework:Sidework(
+                                    id: appViewModel.state.selectedSideworkID,
+                                    name: appViewModel.state.newSideworkName,
+                                    employees: [],
+                                    todoToday:(appViewModel.state.sideworks.first(where: {it in
+                                        it.id == appViewModel.state.selectedSideworkID})?.todoToday ?? false )
+                                )
+                            )
+                        )
                     }
                 }
             }
+            Text("Sideworks:\(appViewModel.state.sideworks.count)")
+                .foregroundColor(.gray)
             
-//             Text("Sideworks:\(sideworks.count)")
-//                    .foregroundColor(.gray)
-//
             ScrollView{
                 VStack(alignment:HorizontalAlignment.leading){
-//                    ForEach(sideworks, id: \.self) { data in
-//
-//                        HStack{
-//                            Button(action:{toggleIsHere(data:data)}){
-//
-//                                Image(systemName: data.todoToday ? "checkmark.circle": "circle")
-//                                    .font(data.todoToday ? .system(size: 40):.system(size: 20) )
-//                                    .foregroundColor(data.todoToday ? Color.black: Color.gray)
-//
-//
-//                                Text(data.wrappedName)
-//                                    .foregroundColor(data.todoToday ? Color.black: Color.gray)
-//                                    .font(.system(size: 20, weight: .medium))
-//
-//
-//                                Spacer()
-//
-//                                IconView(name:"pencil.circle.fill",
-//                                         foregroundColor: sideWorkToEditUUID != nil && sideWorkToEditUUID == data.id ?
-//                                            .red :.black){
-//                                    if(sideWorkToEditUUID == data.id){
-//                                        sideWorkToEditUUID = nil
-//                                        name = ""
-//                                        buttonText = "Add"
-//
-//                                    }else{
-//                                        sideWorkToEditUUID = data.id
-//                                        name = data.wrappedName
-//                                        buttonText = "Save"
-//                                    }
-//                                }
-//
-//                                IconView(name: "trash.circle.fill", foregroundColor: .black) {
-//                                    deleteItems(sideWork:data)
-//                                    sideWorkToEditUUID = nil
-//                                    buttonText = "Add"
-//
-//                                }
-//                            }
-//                        }
-//                        .padding()
-//                    }
+                    ForEach(appViewModel.state.sideworks, id: \.self) { sidework in
+                        
+                        HStack{
+                            Button(action:{
+                                appViewModel.onTriggerEvent(stateEvent: AppEvents.ToggleTodoToday(sidework: Sidework(id: sidework.id,name: sidework.name,  employees: [], todoToday: !sidework.todoToday)))
+                            }){
+                                
+                                Image(systemName: sidework.todoToday ? "checkmark.circle": "multiply.circle")
+                                    .font(sidework.todoToday ? .system(size: 40):.system(size: 20) )
+                                    .foregroundColor(sidework.todoToday ? Color.black: Color.gray)
+                                
+                                
+                                Text(sidework.name)
+                                    .foregroundColor(sidework.todoToday ? Color.black: Color.gray)
+                                    .font(.system(size: 20, weight: .medium))
+                                
+                                Spacer()
+                                
+                                IconView(name:"pencil.circle.fill",
+                                         foregroundColor: appViewModel.state.isSideworkEditShowing && appViewModel.state.selectedSideworkID == sidework.id ? .red : .black){
+                                    
+                                    if(appViewModel.state.selectedSideworkID == sidework.id){
+                                        name = ""
+                                    }else{
+                                        name = sidework.name
+                                    }
+                                    appViewModel.onTriggerEvent(stateEvent: AppEvents.ToggleEditSidework(sidework: sidework))
+                                }
+                                
+                                IconView(name: "trash.circle.fill", foregroundColor: .black) {
+                                    appViewModel.onTriggerEvent(stateEvent: AppEvents.DeleteSidework(sideworkID: sidework.id))
+                                }
+                            }
+                        }
+                        .padding()
+                    }
                 }
             }
         }
+        .onAppear(perform: {
+            self.name = appViewModel.state.newSideworkName
+        })
     }
- 
- 
-//    private func toggleIsHere(data:SideworkWithEmployees){
-//        data.todoToday.toggle()
-//
-//        do {
-//            try data.managedObjectContext?.save()
-//        } catch {
-//            // Replace this implementation with code to handle the error appropriately.
-//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//            let nsError = error as NSError
-//            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-//        }
-//    }
-    
-//    private func addSidework(name:String) {
-//
-//    }
-//
-//
-//    private func updateSideworkName(sideWork:SideworkWithEmployees?, newName:String) {
-//
-//
-//    }
-//
-//    private func deleteItems(sideWork:SideworkWithEmployees) {
-//
-//    }
 }

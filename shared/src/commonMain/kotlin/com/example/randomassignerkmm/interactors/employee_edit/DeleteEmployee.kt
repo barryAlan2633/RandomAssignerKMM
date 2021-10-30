@@ -5,8 +5,9 @@ import com.example.randomassignerkmm.domain.model.Employee
 import com.example.randomassignerkmm.domain.model.GenericMessageInfo
 import com.example.randomassignerkmm.domain.model.PositiveAction
 import com.example.randomassignerkmm.domain.model.UIComponentType
+import com.example.randomassignerkmm.domain.util.CommonFlow
 import com.example.randomassignerkmm.domain.util.DataState
-import kotlinx.coroutines.flow.Flow
+import com.example.randomassignerkmm.domain.util.asCommonFlow
 import kotlinx.coroutines.flow.flow
 
 class DeleteEmployee(
@@ -14,11 +15,11 @@ class DeleteEmployee(
 ) {
 
     fun execute(
-        sideworkID: String
-    ): Flow<DataState<List<Employee>>> = flow {
+        employeeID: String
+    ): CommonFlow<DataState<List<Employee>>> = flow {
 
         try {
-            appCache.deleteEmployee(sideworkID)
+            appCache.deleteEmployee(employeeID)
 
             emit(
                 DataState.data(
@@ -43,5 +44,5 @@ class DeleteEmployee(
                 )
             )
         }
-    }
+    }.asCommonFlow()
 }

@@ -2,14 +2,42 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    kotlin("native.cocoapods")
     kotlin("plugin.serialization")
     id("com.android.library")
     id("com.squareup.sqldelight")
 }
+// CocoaPods requires the podspec to have a version.
+version = "1.0"
 
 
 kotlin {
     android()
+
+    ios()
+    cocoapods {
+
+            framework {
+                ios.deploymentTarget = "13.5"
+
+                // Configure fields required by CocoaPods.
+                summary = "Some description for a Kotlin/Native module"
+                homepage = "Link to a Kotlin/Native module homepage"
+                // Framework name configuration. Use this property instead of deprecated 'frameworkName'
+                baseName = "MyFramework"
+                // (Optional) Dynamic framework support
+                isStatic = false
+                // (Optional) Dependency export
+//                export(project(":anotherKMMModule"))
+//                transitiveExport = true
+                // (Optional) Bitcode embedding
+                embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode.BITCODE)
+            }
+
+            // Maps custom Xcode configuration to NativeBuildType
+            xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
+            xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
+        }
 
     val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
         System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
@@ -37,8 +65,8 @@ kotlin {
 
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
 
-                //Flows
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+                //Flows need native-mt for xcode error
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
 
             }
         }

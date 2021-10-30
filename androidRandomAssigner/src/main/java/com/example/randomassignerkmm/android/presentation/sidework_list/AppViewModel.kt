@@ -17,8 +17,6 @@ import com.example.randomassignerkmm.interactors.sidework_list.*
 import com.example.randomassignerkmm.presentation.AppEvents
 import com.example.randomassignerkmm.presentation.AppState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
@@ -36,16 +34,14 @@ constructor(
     private val editSidework: EditSidework
 ) : ViewModel() {
 
-
     val state: MutableState<AppState> = mutableStateOf(AppState())
-
 
     fun onTriggerEvent(event: AppEvents) {
         when (event) {
 
             is AppEvents.OnRemoveHeadMessageFromQueue -> removeHeadMessage()
 
-            AppEvents.ShuffleSideworks -> shuffleSideworks()
+            AppEvents.ShuffleSideworks -> assignSideworks()
 
             AppEvents.ToggleEditSideworks -> toggleEditSideworks()
             AppEvents.ToggleEditEmployees -> toggleEditEmployees()
@@ -53,19 +49,19 @@ constructor(
             is AppEvents.ToggleEditSidework -> toggleEditSidework(event.sidework)
             is AppEvents.ToggleEditEmployee -> toggleEditEmployee(event.employee)
 
-          is AppEvents.ToggleTodoToday -> saveSidework(event.sidework)
-          is AppEvents.ToggleIsHere -> saveEmployee(event.employee)
+            is AppEvents.ToggleTodoToday -> saveSidework(event.sidework)
+            is AppEvents.ToggleIsHere -> saveEmployee(event.employee)
 
-          is AppEvents.SetNewSideworkName -> setNewSideworkName(event.name)
-          is AppEvents.SetNewEmployeeName -> setNewEmployeeName(event.name)
+            is AppEvents.SetNewSideworkName -> setNewSideworkName(event.name)
+            is AppEvents.SetNewEmployeeName -> setNewEmployeeName(event.name)
 
-          is AppEvents.DeleteSidework -> deleteSidework(event.sideworkID)
-          is AppEvents.DeleteEmployee -> deleteEmployee(event.employeeID)
+            is AppEvents.DeleteSidework -> deleteSidework(event.sideworkID)
+            is AppEvents.DeleteEmployee -> deleteEmployee(event.employeeID)
 
-          is AppEvents.SaveSidework -> saveSidework(event.sidework)
-          is AppEvents.SaveEmployee -> saveEmployee(event.employee)
+            is AppEvents.SaveSidework -> saveSidework(event.sidework)
+            is AppEvents.SaveEmployee -> saveEmployee(event.employee)
 
-          else -> appendToMessageQueue(
+            else -> appendToMessageQueue(
                 GenericMessageInfo.Builder()
                     .id(UUID.randomUUID().toString())
                     .title("Error")
@@ -86,8 +82,8 @@ constructor(
         }
     }
 
-    private fun shuffleSideworks() {
-        shuffleSideworks.execute().onEach { dataState ->
+    private fun assignSideworks() {
+        shuffleSideworks.execute().collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { sideworks ->
                 state.value = state.value.copy(shuffledSideworks = sideworks)
@@ -97,11 +93,11 @@ constructor(
                 appendToMessageQueue(message)
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun toggleEditSideworks() {
-        getSideworks.execute().onEach { dataState ->
+        getSideworks.execute().collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { sideworks ->
                 state.value = state.value.copy(
@@ -115,11 +111,11 @@ constructor(
             }
 
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun toggleEditEmployees() {
-        getEmployees.execute().onEach { dataState ->
+        getEmployees.execute().collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { employees ->
                 state.value = state.value.copy(
@@ -133,7 +129,7 @@ constructor(
             }
 
 
-        }.launchIn(viewModelScope)
+        }
 
     }
 
@@ -182,7 +178,7 @@ constructor(
     }
 
     private fun deleteSidework(sideworkID: String) {
-        deleteSidework.execute(sideworkID).onEach { dataState ->
+        deleteSidework.execute(sideworkID).collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { sideworks ->
                 state.value = state.value.copy(sideworks = sideworks)
@@ -192,11 +188,11 @@ constructor(
                 appendToMessageQueue(message)
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun deleteEmployee(employeeID: String) {
-        deleteEmployee.execute(employeeID).onEach { dataState ->
+        deleteEmployee.execute(employeeID).collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { employees ->
                 state.value = state.value.copy(employees = employees)
@@ -206,11 +202,11 @@ constructor(
                 appendToMessageQueue(message)
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun saveSidework(sidework: Sidework) {
-        editSidework.execute(sidework).onEach { dataState ->
+        editSidework.execute(sidework).collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { sideworks ->
                 state.value = state.value.copy(
@@ -226,11 +222,11 @@ constructor(
                 appendToMessageQueue(message)
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun saveEmployee(employee: Employee) {
-        editEmployee.execute(employee).onEach { dataState ->
+        editEmployee.execute(employee).collectCommon(viewModelScope) { dataState ->
 
             dataState.data?.let { employees ->
 
@@ -247,14 +243,14 @@ constructor(
                 appendToMessageQueue(message)
             }
 
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun appendToMessageQueue(messageInfo: GenericMessageInfo.Builder) {
         if (!GenericMessageInfoQueueUtil()
                 .doesMessageAlreadyExistInQueue(
-                queue = state.value.queue, messageInfo = messageInfo.build()
-            )
+                    queue = state.value.queue, messageInfo = messageInfo.build()
+                )
         ) {
             val queue = state.value.queue
             queue.add(messageInfo.build())

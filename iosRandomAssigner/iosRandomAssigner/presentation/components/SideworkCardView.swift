@@ -11,17 +11,21 @@ import shared
 
 struct SideworkCardView: View {
     var sideWorkWithEmployees : Sidework
-    
+ 
     var body: some View {
         
         VStack(alignment: .leading){
             
-            Text(sideWorkWithEmployees.name)
-                .font(sideWorkWithEmployees.isDueToday ? .system(size: 25, weight: .medium) : .system(size:15,weight: .light))
+            Text(sideWorkWithEmployees.name.capitalized)
+                .font(.system(size: 25, weight: .medium))
                 .foregroundColor( .black )
             
-            Text((sideWorkWithEmployees.employee != nil) ? sideWorkWithEmployees.employee!.name : "")
-            //sideWorkWithEmployees.isDueToday ? sideWorkWithEmployees.employee.joined(separator: ", "): "")
+            Text(
+                sideWorkWithEmployees.employees.map( { (employee) -> String in
+                    employee.name
+                    
+                }).joined(separator: ", ")
+            )
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(.black)
         }

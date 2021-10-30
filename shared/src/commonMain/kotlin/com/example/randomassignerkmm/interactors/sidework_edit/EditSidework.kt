@@ -5,7 +5,9 @@ import com.example.randomassignerkmm.domain.model.GenericMessageInfo
 import com.example.randomassignerkmm.domain.model.PositiveAction
 import com.example.randomassignerkmm.domain.model.Sidework
 import com.example.randomassignerkmm.domain.model.UIComponentType
+import com.example.randomassignerkmm.domain.util.CommonFlow
 import com.example.randomassignerkmm.domain.util.DataState
+import com.example.randomassignerkmm.domain.util.asCommonFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -15,7 +17,7 @@ class EditSidework(
 
     fun execute(
         sidework: Sidework
-    ): Flow<DataState<List<Sidework>>> = flow {
+    ): CommonFlow<DataState<List<Sidework>>> = flow {
 
 
 
@@ -49,5 +51,5 @@ class EditSidework(
                 )
             )
         }
-    }
+    }.asCommonFlow()
 }
