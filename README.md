@@ -1,6 +1,7 @@
 # RandomAssignerKMM
 KMM project: Helps restaurant managers randomly sort sideworks for their employees.
-Technologies:
+
+#Technologies:
   KMP, KMM, SQLDelight, Hilt, SwiftUI, Jetpack Compose, Kotlin, Swift
 
 <img src=/screenshot1.jpeg alt="alt text" width="300">
