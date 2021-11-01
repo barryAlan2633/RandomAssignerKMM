@@ -110,6 +110,6 @@ android {
 
 sqldelight {
     database("AppDatabase") {
-        packageName = "com.example.randomassignerkmm.datasource.cache"
+        packageName = "com.barryalan.randomassignerkmm.datasource.cache"
     }
 }

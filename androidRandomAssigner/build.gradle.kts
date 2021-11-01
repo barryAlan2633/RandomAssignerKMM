@@ -50,11 +50,16 @@ dependencies {
 android {
     compileSdk = 31
     defaultConfig {
-        applicationId = "com.example.randomassignerkmm.android"
+        applicationId = "com.barryalan.randomassignerkmm.android"
         minSdk = 21
         targetSdk = 31
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
+        externalNativeBuild {
+            cmake {
+                cppFlags += ""
+            }
+        }
     }
 
     buildFeatures {
@@ -74,6 +79,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
 
 // Allow references to generated code hilt

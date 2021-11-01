@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.randomassignerkmm.android">
+    package="com.barryalan.randomassignerkmm.android">
 
     <application
         android:name=".BaseApplication"
         android:allowBackup="false"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:label="Random Side Work Assigner"
+        android:theme="@style/AppTheme"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true">
