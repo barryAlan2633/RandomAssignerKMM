@@ -13,6 +13,7 @@
 		834D7314272CC0FF00C8DDC2 /* GenericMessageInfoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834D7313272CC0FF00C8DDC2 /* GenericMessageInfoAlert.swift */; };
 		834E23DA2729B5E6009ED98D /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E23D92729B5E6009ED98D /* AppViewModel.swift */; };
 		838F932C26EC6C0C00E41402 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 838F932B26EC6C0C00E41402 /* Media.xcassets */; };
+		83944770273389D500788854 /* BottomSheetForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8394476F273389D500788854 /* BottomSheetForm.swift */; };
 		83AAF085272E68C300D9AC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83AAF084272E68C300D9AC1B /* Assets.xcassets */; };
 		83E7119C271EBA5300EA2407 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7119B271EBA5300EA2407 /* IconView.swift */; };
 		83E7119E271EBA5900EA2407 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7119D271EBA5900EA2407 /* ButtonView.swift */; };
@@ -22,9 +23,7 @@
 		83E711A6271EBA9E00EA2407 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711A5271EBA9E00EA2407 /* BackgroundView.swift */; };
 		83E711A8271EBAA600EA2407 /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711A7271EBAA600EA2407 /* SettingsRowView.swift */; };
 		83E711AA271EBAB800EA2407 /* SideworkCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711A9271EBAB800EA2407 /* SideworkCardView.swift */; };
-		83E711AC271EBACC00EA2407 /* OnBoardingForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711AB271EBACC00EA2407 /* OnBoardingForm.swift */; };
 		83E711AE271EBADD00EA2407 /* SideworkListForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711AD271EBADD00EA2407 /* SideworkListForm.swift */; };
-		83E711B0271EBAEC00EA2407 /* BottomSheetForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711AF271EBAEC00EA2407 /* BottomSheetForm.swift */; };
 		83E711B2271EBAFB00EA2407 /* EmployeeEditListForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711B1271EBAFB00EA2407 /* EmployeeEditListForm.swift */; };
 		83E711B4271EBB0D00EA2407 /* SideworkEditListForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711B3271EBB0D00EA2407 /* SideworkEditListForm.swift */; };
 		83E711B6271EBB1700EA2407 /* SettingsForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E711B5271EBB1700EA2407 /* SettingsForm.swift */; };
@@ -54,6 +53,7 @@
 		834D7313272CC0FF00C8DDC2 /* GenericMessageInfoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericMessageInfoAlert.swift; sourceTree = "<group>"; };
 		834E23D92729B5E6009ED98D /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		838F932B26EC6C0C00E41402 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		8394476F273389D500788854 /* BottomSheetForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetForm.swift; sourceTree = "<group>"; };
 		83AAF084272E68C300D9AC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83E7119B271EBA5300EA2407 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		83E7119D271EBA5900EA2407 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
@@ -63,9 +63,7 @@
 		83E711A5271EBA9E00EA2407 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		83E711A7271EBAA600EA2407 /* SettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowView.swift; sourceTree = "<group>"; };
 		83E711A9271EBAB800EA2407 /* SideworkCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideworkCardView.swift; sourceTree = "<group>"; };
-		83E711AB271EBACC00EA2407 /* OnBoardingForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingForm.swift; sourceTree = "<group>"; };
 		83E711AD271EBADD00EA2407 /* SideworkListForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideworkListForm.swift; sourceTree = "<group>"; };
-		83E711AF271EBAEC00EA2407 /* BottomSheetForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetForm.swift; sourceTree = "<group>"; };
 		83E711B1271EBAFB00EA2407 /* EmployeeEditListForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeEditListForm.swift; sourceTree = "<group>"; };
 		83E711B3271EBB0D00EA2407 /* SideworkEditListForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideworkEditListForm.swift; sourceTree = "<group>"; };
 		83E711B5271EBB1700EA2407 /* SettingsForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsForm.swift; sourceTree = "<group>"; };
@@ -159,9 +157,8 @@
 		83E7119A271EBA3A00EA2407 /* Forms */ = {
 			isa = PBXGroup;
 			children = (
+				8394476F273389D500788854 /* BottomSheetForm.swift */,
 				83E711AD271EBADD00EA2407 /* SideworkListForm.swift */,
-				83E711AB271EBACC00EA2407 /* OnBoardingForm.swift */,
-				83E711AF271EBAEC00EA2407 /* BottomSheetForm.swift */,
 				83E711B1271EBAFB00EA2407 /* EmployeeEditListForm.swift */,
 				83E711B3271EBB0D00EA2407 /* SideworkEditListForm.swift */,
 				83E711B5271EBB1700EA2407 /* SettingsForm.swift */,
@@ -305,12 +302,11 @@
 				83E711A0271EBA6C00EA2407 /* SettingsLabelView.swift in Sources */,
 				834D7314272CC0FF00C8DDC2 /* GenericMessageInfoAlert.swift in Sources */,
 				83E7119E271EBA5900EA2407 /* ButtonView.swift in Sources */,
-				83E711AC271EBACC00EA2407 /* OnBoardingForm.swift in Sources */,
 				83E711B4271EBB0D00EA2407 /* SideworkEditListForm.swift in Sources */,
 				7555FF83242A565900829871 /* MainScreen.swift in Sources */,
 				83E711A2271EBA7A00EA2407 /* CheckView.swift in Sources */,
+				83944770273389D500788854 /* BottomSheetForm.swift in Sources */,
 				83E711A8271EBAA600EA2407 /* SettingsRowView.swift in Sources */,
-				83E711B0271EBAEC00EA2407 /* BottomSheetForm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -53,8 +53,8 @@ android {
         applicationId = "com.barryalan.randomassignerkmm.android"
         minSdk = 21
         targetSdk = 31
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "2.1"
         externalNativeBuild {
             cmake {
                 cppFlags += ""
