@@ -20,7 +20,10 @@ struct EmployeeEditListForm: View {
         VStack(alignment: HorizontalAlignment.leading){
             
             HStack{
-                TextField("Enter Employee Name", text: $name)
+                TextField("", text: $name)
+                    .placeholder(when: name.isEmpty){
+                        Text("Enter Employee Name").foregroundColor(Color("HintGray"))
+                    }
                     .onChange(of: name, perform: { value in
                         appViewModel.onTriggerEvent(stateEvent: AppEvents.SetNewEmployeeName(name: value))
                     })
@@ -62,7 +65,7 @@ struct EmployeeEditListForm: View {
             }
             
             Text("Employees:\(appViewModel.state.employees.count)")
-                .foregroundColor(.gray)
+                .foregroundColor(Color("HintGray"))
             
             
             ScrollView{
@@ -116,3 +119,5 @@ struct EmployeeEditListForm: View {
         })
     }
 }
+
+ 

@@ -21,13 +21,16 @@ struct SideworkEditListForm: View {
         VStack(alignment: HorizontalAlignment.leading){
             
             HStack{
-                TextField("Enter Side Work Name",text: $name)
+                TextField("",text: $name)
+                    .placeholder(when: name.isEmpty){
+                        Text("Enter Side Work Name").foregroundColor(Color("HintGray"))
+                    }
                     .onChange(of: name, perform: { value in
                         appViewModel.onTriggerEvent(stateEvent: AppEvents.SetNewSideworkName(name: value))
                     })
                     .foregroundColor(Color.black)
                     .font(.system(size: 20, weight: .medium))
-                
+                     
                 
                 
                 Spacer()
@@ -68,7 +71,7 @@ struct SideworkEditListForm: View {
                 }
             }
             Text("Sideworks:\(appViewModel.state.sideworks.count)")
-                .foregroundColor(.gray)
+                .foregroundColor(Color("HintGray"))
             
             ScrollView{
                 VStack(alignment:HorizontalAlignment.leading){
@@ -114,5 +117,19 @@ struct SideworkEditListForm: View {
         .onAppear(perform: {
             self.name = appViewModel.state.newSideworkName
         })
+    }
+}
+
+
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }

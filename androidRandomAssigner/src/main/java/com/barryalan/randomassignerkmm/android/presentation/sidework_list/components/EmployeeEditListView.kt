@@ -11,11 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.barryalan.randomassignerkmm.android.R
 import com.barryalan.randomassignerkmm.android.presentation.components.ButtonView
 import com.barryalan.randomassignerkmm.android.presentation.components.IconView
 import com.barryalan.randomassignerkmm.android.presentation.components.RoundedCheckView
@@ -31,7 +33,6 @@ fun EmployeeEditListView(
 ) {
 
     val maxLength = 110
-    val selected = remember { mutableStateOf(false) }
 
     //button,text field,text
     Column(
@@ -66,7 +67,7 @@ fun EmployeeEditListView(
                     Text(
                         text = "Enter Employee's name",
                         fontSize = 20.sp,
-                        color = Color.LightGray
+                        color = colorResource(R.color.HintGray)
                     )
                 }
 //            trailingIcon = {
@@ -119,7 +120,7 @@ fun EmployeeEditListView(
             text = "Employees:${state.employees.size}",
             fontSize = 17.sp,
             fontWeight = FontWeight.Normal,
-            color = Color.Gray,
+            color = colorResource(R.color.HintGray),
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .fillMaxWidth(0.8f)
