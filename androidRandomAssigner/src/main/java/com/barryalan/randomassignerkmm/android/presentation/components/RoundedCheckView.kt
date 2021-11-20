@@ -1,5 +1,6 @@
 package com.barryalan.randomassignerkmm.android.presentation.components
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -96,10 +97,20 @@ fun RoundedCheckView(
                 .background(Color.White)  ,
             contentAlignment = Alignment.Center
         ) {
-            Icon(imageVector = if(isChecked) Icons.Default.Check else Icons.Default.Close ,
-                contentDescription = "",
-                tint = iconColor
-            )
+//            Icon(imageVector = if(isChecked) Icons.Default.Check else Icons.Default.Close ,
+//                contentDescription = "",
+//                tint = iconColor
+//            )
+
+            Crossfade(targetState = isChecked) { isChecked ->
+                // note that it's required to use the value passed by Crossfade
+                // instead of your state value
+                if (isChecked) {
+                    Icon(imageVector = Icons.Default.Check, contentDescription = "", tint = Color.Black)
+                } else {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "", tint = Color.Gray)
+                }
+            }
 
          }
 
